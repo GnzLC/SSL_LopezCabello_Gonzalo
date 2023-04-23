@@ -2,7 +2,7 @@ Un programa que muestra el string "Hola Mundo!" por consola mediante el uso de l
 
 Se instaló correctamente el MinGW y se hizo una prueba de ejecutable escribiendo 
 
-     g++.exe .\holamundo.cc
+     gcc .\holamundo.c
 
       .\a.exe
 
