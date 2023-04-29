@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-
-size_t estados[][6] = {
+size_t tablaDeEstados[][6] = {
     {1,2,2,6,6,6},
     {5,5,6,6,3,6},
     {2,2,2,6,6,6},
@@ -17,100 +18,118 @@ size_t  cant_finales = 4 ;
 size_t simbolos[] = {0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f','A','B','C','D','E','F','x','X'};
 size_t cant_simbolos = 24;
 
-int automata(void);
+
+int automata(char c[],int);
 size_t posicionAlfabeto(char);
 int esFinal(size_t estado);
+int tipoDeNumero(size_t tipo); 
+void guardar(char c[],int,int);
 
 int main(int argc, char **args) {
-    char c;
-    int tipo;
-    while((c = getc(stdin)) != EOF){
-        ungetc(c,stdin);
-        tipo = automata();
-        }
-        if(tipo == 1){
-            printf ("Es octal\n");
-        }
-        if(tipo == 2){
-            printf ("Es Decimal\n");
-        }
-        if(tipo == 3){
-            printf ("Es Hexadecimal\n");
-        }
-        else{
-            printf("No Valido\n");}
-    return 0;
-    }
 
-    /*FILE *archivo;
-    char caracter;
+    FILE *entrada = fopen("entrada.txt", "r"); 
+    FILE *salida = fopen("salida.txt","wt");
 
-    archivo = fopen("archivo.txt", "r");
-
-    if (archivo == NULL) {
+    if (entrada == NULL) {
         printf("Error al abrir el archivo\n");
         return 1;
     }
 
-    while ((caracter = fgetc(archivo)) != EOF) {
-        printf("%c", caracter);
+    char c;
+    int tipo, i = 0;
+    char palabra [100];
+
+    while (c = fgetc(entrada)){
+        if (c == EOF){tipo = automata(palabra,i);
+            int j ;
+            char k ;
+            for(j = 0; j < i ; j ++){
+            k = palabra[j];
+            fputc(k,salida);
+            }
+        switch (tipo)
+        {
+        case 1:
+                fputs ("  Es octal\n",salida);
+            break;
+        case 2:
+                fputs ("  Es Decimal\n", salida);
+            break;
+        case 3:
+                fputs ("  Es Hexadecimal\n",salida);
+            break;
+        default:
+                fputs("  No es valido\n",salida);
+            break;
+        }break;};
+
+        if (c != ','){
+            palabra[i] = c;
+            i++;
+        }
+        else {  
+            tipo = automata(palabra,i);
+            int j ;
+            char k ;
+            for(j = 0; j < i ; j ++){
+            k = palabra[j];
+            fputc(k,salida);
+            }
+        switch (tipo)
+        {
+        case 1:
+                fputs ("  Es octal\n",salida);
+            break;
+        case 2:
+                fputs ("  Es Decimal\n", salida);
+            break;
+        case 3:
+                fputs ("  Es Hexadecimal\n",salida);
+            break;
+        default:
+                fputs("  No es valido\n",salida);
+            break;
+        }
+                i = 0;
+        }
+    }
+    fclose(salida);
+    fclose(entrada);
+    return 0;
     }
 
-    fclose(archivo);
 
-    return 0;*/
  
 
-int automata(void){
-    size_t estado = 0;
-    char c;
-    while((c = getc(stdin)) != '\n'){ 
-        estado = estados[estado][posicionAlfabeto(c)];
-    }
+int automata(char palabra[], int i){
+    int j , estado ;
+    char c ;
+    estado = 0;
+
+    for(j = 0; j < i ; j ++){
+        c = palabra[j];
+        estado = tablaDeEstados[estado][posicionAlfabeto(c)];
+    } 
+
     return esFinal(estado);
 }
 
 size_t posicionAlfabeto(char c){
-    size_t i ;
     switch (c) {
-
     case '0':
-         i = 0;
-         return i;
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-        i = 1;
-        return i;
-    case '8':
-    case '9':
-        i = 2;
-        return i;
-    case 'a':
-    case 'b':
-    case 'c':
-    case 'd':
-    case 'e':
-    case 'f':
-    case 'A':
-    case 'B':
-    case 'C':
-    case 'D':
-    case 'E':
-    case 'F':
-        i = 3;
-        return i;
+         return 0;
+    case '1' ... '7':
+        return 1;
+    case '8' ... '9':
+        return 2;
+    case 'a' ... 'f':
+    case 'A' ... 'F':
+        return 3;
     case 'x':
     case 'X':
-         i = 4;
-         return i;
+         return 4;
     default:
-         i = 5;
-         return i;
+         return 5;
     }
 }
 

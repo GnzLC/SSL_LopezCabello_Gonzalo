@@ -1,0 +1,11 @@
+0xFF  Es Hexadecimal
+127  Es Decimal
+0159  No es valido
+0xaBb1  Es Hexadecimal
+0Xx  No es valido
+0  Es octal
+010  Es octal
+09  No es valido
+127A  No es valido
+120
+  No es valido
